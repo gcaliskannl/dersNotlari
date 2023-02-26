@@ -1,0 +1,35 @@
+//------------->Trigger 
+trigger AccountTrigger on Account (before insert, before update, after insert, after update, before delete, after delete, after undelete) {
+    
+    if(Trigger.isAfter && Trigger.isUndelete){
+        AccountTriggerHandler.sendingEmailRestore(Trigger.new);
+    }
+    
+    if(Trigger.isAfter && Trigger.isDelete){
+        AccountTriggerHandler.sendingEmailDelete(Trigger.old);
+    }
+    
+    if(Trigger.isBefore && Trigger.isDelete){
+        AccountTriggerHandler.beforeDelete(Trigger.old);
+    }
+    
+    if(Trigger.isAfter && Trigger.isUpdate){
+        AccountTriggerHandler.updatePhoneNum(Trigger.new, Trigger.oldMap);
+    }
+    
+    if(Trigger.isBefore && Trigger.isUpdate){
+        AccountTriggerHandler.newAccName(Trigger.new, Trigger.oldMap);
+    }  
+    
+    if(Trigger.isAfter && Trigger.isInsert){
+        AccountTriggerHandler.accWithCon(Trigger.new);
+    }
+    
+    if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
+        AccountTriggerHandler.annualRevenue(Trigger.new);  
+    }
+    
+    if(Trigger.isBefore && Trigger.isInsert){
+        AccountTriggerHandler.billingShipping(Trigger.new);
+    }
+}
